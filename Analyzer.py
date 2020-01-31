@@ -2,7 +2,7 @@ import wave, struct
 import math, numpy
 import os
 from scipy.fft import rfft
-from tkinter import Tk, Canvas, Label, Text, Entry, Button, Frame, DoubleVar, filedialog
+from tkinter import Tk, Canvas, Label, Text, Entry, Button, Frame, DoubleVar, StringVar, filedialog
 from time import time
 
 #####################################################
@@ -78,12 +78,14 @@ class Analyzer:
         # CONFIGURABLE VALUES
         self.start_time = DoubleVar()
         self.end_time = DoubleVar()
+        self.file_var = StringVar()
         start_Frame = Frame(config)
         end_Frame   = Frame(config)
         button_Frame= Frame(config, bg=self.g_prop['bg_color'])
-        Label(config,       font=("Roboto", 16), text='Frequencies',  bg=self.g_prop['bg_color'], fg=self.g_prop['config_color']).pack(side='top', pady=(30,0))
+        Label(config,       font=("Roboto", 16), text='Frequencies',  bg=self.g_prop['bg_color'], fg=self.g_prop['config_color']).pack(side='top', pady=(20,0))
         Label(start_Frame,  font=("Roboto", 12), width=10, text='Start Time',   bg=self.g_prop['bg_color'], fg=self.g_prop['config_color']).pack(side='left', fill='y')
         Label(end_Frame,    font=("Roboto", 12), width=10, text='End Time',     bg=self.g_prop['bg_color'], fg=self.g_prop['config_color']).pack(side='left', fill='y')
+        Label(config,       font=("Roboto", 11), width=10, textvariable=self.file_var, bg=self.g_prop['bg_color'], fg=self.g_prop['config_color']).pack(side='bottom', fill='x')
         Entry(start_Frame,  font=("Roboto", 12), width=15, textvariable=self.start_time).pack(side='right', fill='y')
         Entry(end_Frame,    font=("Roboto", 12), width=15, textvariable=self.end_time).pack(side='right', fill='y')
         Load_Graph      =   Button(button_Frame, bd=0, bg=self.g_prop['btn_bg_color'], fg=self.g_prop['btn_fg_color'], activebackground=self.g_prop['btn_abg_color'], text='Update', font=("Roboto", 12), height=2, width=12,
@@ -160,8 +162,8 @@ class Analyzer:
     def loadFile(self, filepath):
         if (not os.path.exists(filepath)):
             raise Exception('File Not Found.')
-        self._filepath = filepath
-        self.wav_file = wave.open(self._filepath)
+        self.file_var.set(filepath[filepath.rindex('/')+1:])
+        self.wav_file = wave.open(filepath)
         self.start_time.set(0)
         self.end_time.set(0.5)
         print('File Parameters :: ', self.wav_file.getparams())
