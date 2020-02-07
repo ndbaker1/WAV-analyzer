@@ -23,3 +23,4 @@ DOWN ↓      :   Shift the Time Interval by -0.1s
 - python  3.8.1
 - tkinter 8.6
 - scipy   1.4.1
+- numpy   1.18.1
